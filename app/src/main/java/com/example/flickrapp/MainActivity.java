@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -29,27 +30,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
-        Call<List<Photo>> call = service.getPhotos();
-        call.enqueue(new Callback<List<Photo>>() {
+        Call<Feed> call = service.getPhotos();
+        call.enqueue(new Callback<Feed>() {
             @Override
-            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
+            public void onResponse(Call<Feed> call, Response<Feed> response) {
                 loadData(response.body());
             }
 
             @Override
-            public void onFailure(Call<List<Photo>> call, Throwable t) {
-                //TODO: add exception or smth
+            public void onFailure(Call<Feed> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Unable to load photos :(", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
 
-    private void loadData(List<Photo> body) {
+    private void loadData(Feed body) {
         //TODO: check specification
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         RecyclerView recyclerView = findViewById(R.id.rv_images);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        GalleryAdapter galleryAdapter = new GalleryAdapter(this, body);
+        GalleryAdapter galleryAdapter = new GalleryAdapter(this, body.getItems());
         recyclerView.setAdapter(galleryAdapter);
     }
 
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             ImageView imageView = mViewHolder.imageView;
             //TODO: add another things - placeholder and error
             Picasso.get()
-                    .load(photo.getmUrl())
+                    .load(photo.getMedia().getM())
                     .fit()
                     .into(imageView);
         }
