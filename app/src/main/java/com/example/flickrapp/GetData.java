@@ -1,8 +1,13 @@
 package com.example.flickrapp;
 
-public class GetData {
+import java.util.List;
 
-    public Photo getDataFromApi() {
-        return null;
-    }
+import retrofit2.Call;
+import retrofit2.http.GET;
+
+public interface GetData {
+
+    //TODO: do it better
+    @GET("/photos_public.gne?format=json")
+    Call<List<Photo>> getPhotos();
 }
