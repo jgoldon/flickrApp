@@ -1,4 +1,4 @@
-package com.example.flickrapp;
+package com.example.flickrapp.activity;
 
 import android.content.Context;
 import android.content.Intent;

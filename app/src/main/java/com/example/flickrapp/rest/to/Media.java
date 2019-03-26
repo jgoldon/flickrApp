@@ -1,4 +1,4 @@
-package com.example.flickrapp;
+package com.example.flickrapp.rest.to;
 
 public class Media {
 
@@ -8,7 +8,7 @@ public class Media {
         return m;
     }
 
-    public void setM(String m) {
+    void setM(String m) {
         this.m = m;
     }
 }

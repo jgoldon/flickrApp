@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PhotoWithDetailActivity"></activity>
-        <activity android:name=".PhotoActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.PhotoWithDetailActivity"></activity>
+        <activity android:name=".activity.PhotoActivity" />
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

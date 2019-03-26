@@ -1,4 +1,4 @@
-package com.example.flickrapp;
+package com.example.flickrapp.rest.to;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,24 +15,7 @@ public class Photo implements Parcelable {
     private String author_id;
     private String tags;
 
-    public Photo(Media url, String title) {
-        this.media = url;
-        this.title = title;
-    }
-
-    public Photo(String title, String link, Media media, String date_taken, String description, String published, String author, String author_id, String tags) {
-        this.title = title;
-        this.link = link;
-        this.media = media;
-        this.date_taken = date_taken;
-        this.description = description;
-        this.published = published;
-        this.author = author;
-        this.author_id = author_id;
-        this.tags = tags;
-    }
-
-    protected Photo(Parcel in) {
+    private Photo(Parcel in) {
         media = new Media();
         media.setM(in.readString());
         title = in.readString();

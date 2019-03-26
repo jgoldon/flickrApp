@@ -1,4 +1,4 @@
-package com.example.flickrapp;
+package com.example.flickrapp.rest.to;
 
 import java.util.List;
 

@@ -1,17 +1,14 @@
-package com.example.flickrapp;
+package com.example.flickrapp.activity;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.flickrapp.rest.to.Photo;
+import com.example.flickrapp.R;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 public class PhotoActivity extends AppCompatActivity {
 
