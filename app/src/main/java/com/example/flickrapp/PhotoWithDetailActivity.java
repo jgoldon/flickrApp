@@ -116,7 +116,7 @@ public class PhotoWithDetailActivity extends AbstractGalleryActivity {
             public MViewHolder(View view) {
                 super(view);
                 imageView = itemView.findViewById(R.id.ivt_photo);
-                textView = itemView.findViewById(R.id.iv_text);
+                textView = itemView.findViewById(R.id.ivt_text);
                 view.setOnClickListener(this);
             }
 
