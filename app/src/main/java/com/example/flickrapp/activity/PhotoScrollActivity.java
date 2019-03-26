@@ -26,8 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//TODO: rename it
-public class MainActivity extends AbstractGalleryActivity {
+public class PhotoScrollActivity extends AbstractGalleryActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +39,16 @@ public class MainActivity extends AbstractGalleryActivity {
         Call<Feed> call = service.getPhotos();
         call.enqueue(new Callback<Feed>() {
             @Override
-            public void onResponse(Call<Feed> call, Response<Feed> response) {
-                loadData(response.body());
+            public void onResponse(@NonNull Call<Feed> call, @NonNull Response<Feed> response) {
+                if (response.body() != null) {
+                    loadData(response.body());
+                }
             }
 
             @Override
-            public void onFailure(Call<Feed> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Unable to load photos :(", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<Feed> call, @NonNull Throwable t) {
+                Toast.makeText(PhotoScrollActivity.this, "Unable to load photos :(",
+                        Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -57,7 +59,9 @@ public class MainActivity extends AbstractGalleryActivity {
         changeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, PhotoWithDetailActivity.class));
+                startActivity(
+                        new Intent(PhotoScrollActivity.this,
+                                PhotoWithDetailActivity.class));
             }
         });
     }
@@ -76,7 +80,7 @@ public class MainActivity extends AbstractGalleryActivity {
         private List<Photo> mPhotos;
         private Context mContext;
 
-        public GalleryAdapter(Context context, List<Photo> photos) {
+        GalleryAdapter(Context context, List<Photo> photos) {
             mContext = context;
             mPhotos = photos;
         }
@@ -87,18 +91,18 @@ public class MainActivity extends AbstractGalleryActivity {
             Context context = parent.getContext();
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             View view = layoutInflater.inflate(R.layout.image_view, parent, false);
-            GalleryAdapter.MViewHolder viewHolder = new GalleryAdapter.MViewHolder(view);
-            return viewHolder;
+            return new MViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull MViewHolder mViewHolder, int i) {
             Photo photo = mPhotos.get(i);
             ImageView imageView = mViewHolder.imageView;
-            //TODO: add another things - placeholder and error
             Picasso.get()
                     .load(photo.getMedia().getM())
                     .fit()
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.drawable.ic_launcher_foreground)
                     .into(imageView);
         }
 
@@ -111,9 +115,9 @@ public class MainActivity extends AbstractGalleryActivity {
 
                 .OnClickListener {
 
-            public final ImageView imageView;
+            final ImageView imageView;
 
-            public MViewHolder(View view) {
+            MViewHolder(View view) {
                 super(view);
                 imageView = itemView.findViewById(R.id.iv_photo);
                 view.setOnClickListener(this);

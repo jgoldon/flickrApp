@@ -23,16 +23,16 @@ public class PhotoActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.image);
         final Photo photo = getIntent().getParcelableExtra(EXTRA_PHOTO);
 
-        //TODO: aldo add error handling and placeholder
         Handler uiHandler = new Handler(Looper.getMainLooper());
         uiHandler.post(new Runnable(){
             @Override
             public void run() {
-                Picasso.get().load(photo.getMedia().getM())
+                Picasso.get()
+                        .load(photo.getMedia().getM())
+                        .placeholder(R.mipmap.ic_launcher)
+                        .error(R.drawable.ic_launcher_foreground)
                         .into(mImageView);
             }
         });
-//                    .
-//                    .into(mImageView);
     }
 }

@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.PhotoWithDetailActivity"></activity>
         <activity android:name=".activity.PhotoActivity" />
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.PhotoScrollActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

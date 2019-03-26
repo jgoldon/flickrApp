@@ -40,13 +40,16 @@ public class PhotoWithDetailActivity extends AbstractGalleryActivity {
         Call<Feed> call = service.getPhotos();
         call.enqueue(new Callback<Feed>() {
             @Override
-            public void onResponse(Call<Feed> call, Response<Feed> response) {
-                loadData(response.body());
+            public void onResponse(@NonNull Call<Feed> call, @NonNull Response<Feed> response) {
+                if (response.body() != null) {
+                    loadData(response.body());
+                }
             }
 
             @Override
-            public void onFailure(Call<Feed> call, Throwable t) {
-                Toast.makeText(PhotoWithDetailActivity.this, "Unable to load photos :(", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<Feed> call, @NonNull Throwable t) {
+                Toast.makeText(PhotoWithDetailActivity.this, "Unable to load photos :(",
+                        Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -57,7 +60,7 @@ public class PhotoWithDetailActivity extends AbstractGalleryActivity {
         changeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PhotoWithDetailActivity.this, MainActivity.class));
+                startActivity(new Intent(PhotoWithDetailActivity.this, PhotoScrollActivity.class));
             }
         });
     }
@@ -76,7 +79,7 @@ public class PhotoWithDetailActivity extends AbstractGalleryActivity {
         private List<Photo> mPhotos;
         private Context mContext;
 
-        public GalleryAdapter(Context context, List<Photo> photos) {
+        GalleryAdapter(Context context, List<Photo> photos) {
             mContext = context;
             mPhotos = photos;
         }
@@ -87,18 +90,18 @@ public class PhotoWithDetailActivity extends AbstractGalleryActivity {
             Context context = parent.getContext();
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             View view = layoutInflater.inflate(R.layout.image_text_view, parent, false);
-            GalleryAdapter.MViewHolder viewHolder = new GalleryAdapter.MViewHolder(view);
-            return viewHolder;
+            return new MViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull MViewHolder mViewHolder, int i) {
             Photo photo = mPhotos.get(i);
             ImageView imageView = mViewHolder.imageView;
-            //TODO: add another things - placeholder and error
             Picasso.get()
                     .load(photo.getMedia().getM())
                     .fit()
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.drawable.ic_launcher_foreground)
                     .into(imageView);
             mViewHolder.textView.setText(String.format("Title: %s\nDate taken: %s\n" +
                     "Published: %s\nAuthor: %s", photo.getTitle(), photo.getDate_taken(),
@@ -114,10 +117,10 @@ public class PhotoWithDetailActivity extends AbstractGalleryActivity {
 
                 .OnClickListener {
 
-            public final ImageView imageView;
-            public final TextView textView;
+            final ImageView imageView;
+            final TextView textView;
 
-            public MViewHolder(View view) {
+            MViewHolder(View view) {
                 super(view);
                 imageView = itemView.findViewById(R.id.ivt_photo);
                 textView = itemView.findViewById(R.id.ivt_text);
