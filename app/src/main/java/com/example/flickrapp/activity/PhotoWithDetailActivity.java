@@ -27,14 +27,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PhotoWithDetailActivity extends AbstractGalleryActivity {
+public class PhotoWithDetailActivity extends AbstractGalleryActivity<PhotoWithDetailActivity.GalleryAdapter> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_with_detail);
 
-        configureChangeLayoutButton();
+        configureChangeLayoutButton(R.id.button2, PhotoWithDetailActivity.this,
+                PhotoScrollActivity.class);
 
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
         Call<Feed> call = service.getPhotos();
@@ -42,7 +43,7 @@ public class PhotoWithDetailActivity extends AbstractGalleryActivity {
             @Override
             public void onResponse(@NonNull Call<Feed> call, @NonNull Response<Feed> response) {
                 if (response.body() != null) {
-                    loadData(response.body());
+                    loadData(response.body(), 1, R.id.rv2_images);
                 }
             }
 
@@ -55,26 +56,17 @@ public class PhotoWithDetailActivity extends AbstractGalleryActivity {
         });
     }
 
-    private void configureChangeLayoutButton() {
-        Button changeBtn = findViewById(R.id.button2);
-        changeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(PhotoWithDetailActivity.this, PhotoScrollActivity.class));
-            }
-        });
+    @Override
+    protected GalleryAdapter getGalleryAdapter(Context context, List<Photo> photos) {
+        return new GalleryAdapter(context, photos);
     }
 
-    private void loadData(Feed body) {
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1);
-        RecyclerView recyclerView = findViewById(R.id.rv2_images);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        GalleryAdapter galleryAdapter = new GalleryAdapter(this, body.getItems());
+    @Override
+    protected void setAdapter(RecyclerView recyclerView, GalleryAdapter galleryAdapter) {
         recyclerView.setAdapter(galleryAdapter);
     }
 
-    private class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MViewHolder> {
+    protected class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MViewHolder> {
 
         private List<Photo> mPhotos;
         private Context mContext;
